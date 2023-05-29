@@ -3,7 +3,7 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.utils.dates import days_ago
 from datetime import datetime
-from yearly import run_hockey_ref_to_s3
+from yearly import run_hockey_ref_to_s3, s3_to_postgres
 
 default_args = {
     'owner': 'airflow',
@@ -29,4 +29,11 @@ run_etl = PythonOperator(
     dag=dag, 
 )
 
-run_etl
+load_to_postgres = PythonOperator(
+    task_id='complete_s3_to_postgres',
+    python_callable=s3_to_postgres,
+    dag=dag, 
+)
+
+
+run_etl >> load_to_postgres
