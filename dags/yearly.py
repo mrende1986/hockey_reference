@@ -35,5 +35,3 @@ def run_hockey_ref_to_s3():
         bucket_name,
         s3_file)
     print("File uploaded")
-
-run_hockey_ref_to_s3()
